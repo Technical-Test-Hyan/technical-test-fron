@@ -1,6 +1,11 @@
+import { ContactProvider } from "./contacts";
 import { UserProvider } from "./users";
 const Providers = ({ children }) => {
-  return <UserProvider>{children}</UserProvider>;
+  return (
+    <UserProvider>
+      <ContactProvider>{children}</ContactProvider>
+    </UserProvider>
+  );
 };
 
 export default Providers;

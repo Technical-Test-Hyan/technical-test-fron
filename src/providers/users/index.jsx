@@ -9,6 +9,7 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfoState, setUserInfoState] = useState();
   const navigate = useNavigate();
   const verifyUserAuthenticated = () => {
     if (!localStorage.getItem("@token")) {
@@ -16,6 +17,14 @@ export const UserProvider = ({ children }) => {
     } else {
       setIsLoggedIn(true);
     }
+  };
+
+  const userInfo = (user_token) => {
+    api
+      .get("users/", {
+        headers: { Authorization: `Bearer ${user_token}` },
+      })
+      .then((res) => setUserInfoState(res.data));
   };
 
   const userLogin = (data) => {
@@ -35,21 +44,36 @@ export const UserProvider = ({ children }) => {
     api
       .post(`users/`, data)
       .then((res) => {
-        navigate("/login");
+        navigate("/");
         toast.success("Registro realizado com sucesso");
       })
       .catch((err) => {
-        toast.error(err.data);
+        toast.error(err.response.data.message);
       });
+  };
+
+  const userUpdate = (data, user_token) => {
+    api
+      .patch(`users/`, data, {
+        headers: { Authorization: `Bearer ${user_token}` },
+      })
+      .then((res) => {
+        toast.success("Updated success");
+        userInfo(user_token);
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <UserContext.Provider
       value={{
+        userInfo,
         userLogin,
         userRegister,
+        userUpdate,
         isLoggedIn,
         setIsLoggedIn,
         verifyUserAuthenticated,
+        userInfoState,
       }}
     >
       {children}
