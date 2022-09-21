@@ -1,7 +1,7 @@
 # Contacts Aplication
 
 
-This is an Api for you to control your contacts. A simple but very usable proposal.
+This is an APP for you to control your contacts. A simple but very usable proposal.
 
 
 ## Functionalities
